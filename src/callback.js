@@ -56,13 +56,15 @@ const getCb = async (req, res) => {
                 user: req.auth.email,
                 uuid: req.query.uuid,
             },
-        }).then((data) => res.status(200).json(data)).catch((err) => res.status(500).json(err));
+        }).then((data) => res.status(200).json(data))
+            .catch((err) => res.status(500).json(err));
     }
     return Callback.findAll({
         where: {
             user: req.auth.email,
         },
-    }).then((data) => res.send({ callbacks: data })).catch((err) => res.status(500).json(err));
+    }).then((data) => res.status(200).json({ callbacks: data }))
+        .catch((err) => res.status(500).json(err));
 };
 
 const deleteOne = async (req, res) => Callback.destroy({
@@ -75,7 +77,7 @@ const deleteOne = async (req, res) => Callback.destroy({
 const getAdmin = async (req, res) => {
     if (req.auth.admin) {
         return Callback.findAll()
-            .then((data) => res.send({ callbacks: data }))
+            .then((data) => res.status(200).json({ callbacks: data }))
             .catch((err) => res.status(500).json(err));
     }
     return res.status(500).send({ error: 'Unable to access the data' });
