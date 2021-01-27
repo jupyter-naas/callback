@@ -49,12 +49,21 @@ const add = async (req, res) => {
     }
 };
 
-const getOne = async (req, res) => Callback.findOne({
-    where: {
-        user: req.auth.email,
-        uuid: req.body.uuid,
-    },
-}).then((data) => res.status(200).json(data)).catch((err) => res.status(500).json(err));
+const getCb = async (req, res) => {
+    if (req.query && req.query.uuid) {
+        return Callback.findOne({
+            where: {
+                user: req.auth.email,
+                uuid: req.query.uuid,
+            },
+        }).then((data) => res.status(200).json(data)).catch((err) => res.status(500).json(err));
+    }
+    return Callback.findAll({
+        where: {
+            user: req.auth.email,
+        },
+    }).then((data) => res.send({ callbacks: data })).catch((err) => res.status(500).json(err));
+};
 
 const deleteOne = async (req, res) => Callback.destroy({
     where: {
@@ -63,13 +72,7 @@ const deleteOne = async (req, res) => Callback.destroy({
     },
 }).then((data) => res.status(200).json(data));
 
-const getList = async (req, res) => Callback.findAll({
-    where: {
-        user: req.auth.email,
-    },
-}).then((data) => res.send({ callbacks: data })).catch((err) => res.status(500).json(err));
-
-const getListAdmin = async (req, res) => {
+const getAdmin = async (req, res) => {
     if (req.auth.admin) {
         return Callback.findAll()
             .then((data) => res.send({ callbacks: data }))
@@ -104,10 +107,9 @@ const saveResponse = async (req, res) => {
 const routerEmail = express.Router();
 
 routerEmail.route('/').post(authToHub, add);
-routerEmail.route('/').get(authToHub, getOne);
+routerEmail.route('/').get(authToHub, getCb);
 routerEmail.route('/').delete(authToHub, deleteOne);
-routerEmail.route('/list').get(authToHub, getList);
-routerEmail.route('/list_all').get(authToHub, getListAdmin);
+routerEmail.route('/admin').get(authToHub, getAdmin);
 routerEmail.route('/:uuid').all(saveResponse);
 
 export default routerEmail;
