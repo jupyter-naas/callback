@@ -85,6 +85,9 @@ const getAdmin = async (req, res) => {
 
 const saveResponse = async (req, res) => {
     try {
+        if (!req.params.uid) {
+            return res.status(500).send({ error: 'Callback need uid' });
+        }
         const cb = await Callback.findOne({
             uuid: req.params.uid,
         });
@@ -112,6 +115,6 @@ routerEmail.route('/').post(authToHub, add);
 routerEmail.route('/').get(authToHub, getCb);
 routerEmail.route('/').delete(authToHub, deleteOne);
 routerEmail.route('/admin').get(authToHub, getAdmin);
-routerEmail.route('/:uuid').all(saveResponse);
+routerEmail.route('/:uid').all(express.text(), saveResponse);
 
 export default routerEmail;
