@@ -89,7 +89,9 @@ const saveResponse = async (req, res) => {
             return res.status(500).send({ error: 'Callback need uid' });
         }
         const cb = await Callback.findOne({
-            uuid: req.params.uid,
+            where: {
+                uuid: req.params.uid,
+            },
         });
         if (!cb) {
             return res.status(500).send({ error: 'Callback not found' });
