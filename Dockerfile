@@ -30,5 +30,4 @@ RUN npm ci
 
 # install server
 COPY src /app/src
-COPY emails /app/emails
 CMD [ "node", "--es-module-specifier-resolution=node", "src/index" ]
