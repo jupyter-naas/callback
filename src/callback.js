@@ -84,36 +84,35 @@ const getAdmin = async (req, res) => {
 };
 
 const isObject = (obj) => obj !== null && typeof obj === 'object' && Array.isArray(obj) === false;
-const saveResponse = async (req, res) => {
-    try {
-        if (!req.params.uid) {
-            return res.status(500).send({ error: 'Callback need uid' });
-        }
-        const cb = await Callback.findOne({
-            where: {
-                uuid: req.params.uid,
-            },
-        });
+
+const saveResponse = (req, res) => {
+    if (!req.params.uid) {
+        return res.status(500).send({ error: 'Callback need uid' });
+    }
+    return Callback.findOne({
+        where: {
+            uuid: req.params.uid,
+        },
+    }).then((cb) => {
         if (!cb) {
             return res.status(500).send({ error: 'Callback not found' });
         }
+        const update = { result: null, resultHeaders: null };
         if (req.body) {
+            update.result = { data: req.body };
             if (isObject(req.body)) {
-                cb.result = req.body;
-            } else {
-                cb.result = { data: req.body };
+                update.result = req.body;
             }
         }
         if (req.headers) {
-            cb.resultHeaders = req.headers;
+            update.resultHeaders = req.headers;
         }
-        cb.save();
-        return res.status(200).send(cb);
-    } catch (err) {
+        return cb.update(update).then((data) => res.status(200).send(data));
+    }).catch((err) => {
         // eslint-disable-next-line no-console
         console.error('Send Error:', err);
         return res.status(500).send({ error: err });
-    }
+    });
 };
 
 const routerEmail = express.Router();
