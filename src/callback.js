@@ -22,8 +22,6 @@ const authToHub = async (req, res, next) => {
         req.auth = { email: result.data.name, admin: result.data.admin };
         return next();
     } catch (err) {
-        // eslint-disable-next-line no-console
-        // console.error('Auth Error:', err);
         return res.status(500).send(err);
     }
 };
@@ -51,38 +49,33 @@ const add = async (req, res) => {
     }
 };
 
-const getOne = async (req, res) => {
-    Callback.findOne({
-        where: {
-            user: req.auth.email,
-            uuid: req.params.uuid,
-        },
-    }).then((data) => res.status(200).json(data));
-};
+const getOne = async (req, res) => Callback.findOne({
+    where: {
+        user: req.auth.email,
+        uuid: req.params.uuid,
+    },
+}).then((data) => res.status(200).json(data)).catch((err) => res.status(500).json(err));
 
-const deleteOne = async (req, res) => {
-    Callback.destroy({
-        where: {
-            user: req.auth.email,
-            uuid: req.params.uuid,
-        },
-    }).then((data) => res.status(200).json(data));
-};
+const deleteOne = async (req, res) => Callback.destroy({
+    where: {
+        user: req.auth.email,
+        uuid: req.params.uuid,
+    },
+}).then((data) => res.status(200).json(data));
 
-const getList = async (req, res) => {
-    Callback.findAll({
-        where: {
-            user: req.auth.email,
-        },
-    }).then((data) => res.send({ emails: data }));
-};
+const getList = async (req, res) => Callback.findAll({
+    where: {
+        user: req.auth.email,
+    },
+}).then((data) => res.send({ callbacks: data })).catch((err) => res.status(500).json(err));
 
 const getListAdmin = async (req, res) => {
     if (req.auth.admin) {
-        Callback.findAll().then((data) => res.send({ emails: data }));
-    } else {
-        return res.status(500).send({ error: 'Unable to access the data' });
+        return Callback.findAll()
+            .then((data) => res.send({ callbacks: data }))
+            .catch((err) => res.status(500).json(err));
     }
+    return res.status(500).send({ error: 'Unable to access the data' });
 };
 
 const saveResponse = async (req, res) => {
