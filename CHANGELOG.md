@@ -1,3 +1,9 @@
+## 1.2.0 (2021-01-27)
+
+### Feat
+
+- update route path to match REST
+
 ## 1.1.3 (2021-01-27)
 
 ### Fix
