@@ -1,0 +1,40 @@
+{
+  "name": "notifications",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index",
+    "dev": "./test_notif.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martin Donadieu",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jupyter-naas/notifications.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jupyter-naas/notifications/issues"
+  },
+  "homepage": "https://github.com/jupyter-naas/notifications#readme",
+  "dependencies": {
+    "@sentry/node": "^5.25.0",
+    "@sentry/tracing": "^5.25.0",
+    "axios": "^0.21.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.4.2",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.6"
+  }
+}
