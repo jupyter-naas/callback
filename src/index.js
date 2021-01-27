@@ -8,7 +8,7 @@ import {
 } from './db';
 
 const app = express();
-const port = (process.env.PORT || 3003);
+const port = (process.env.PORT || 3004);
 
 app.set('port', port);
 app.use(morgan('tiny'));
