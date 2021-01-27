@@ -24,7 +24,7 @@ export const Callback = sql.define('Callback', {
         allowNull: false,
     },
     result: {
-        type: sequelize.DataTypes.STRING,
+        type: sequelize.DataTypes.JSON,
         allowNull: true,
     },
     resultHeaders: {
@@ -32,7 +32,7 @@ export const Callback = sql.define('Callback', {
         allowNull: true,
     },
     response: {
-        type: sequelize.DataTypes.STRING,
+        type: sequelize.DataTypes.JSON,
         allowNull: true,
     },
     responseHeaders: {

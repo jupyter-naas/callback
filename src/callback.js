@@ -83,6 +83,7 @@ const getAdmin = async (req, res) => {
     return res.status(500).send({ error: 'Unable to access the data' });
 };
 
+const isObject = (obj) => obj !== null && typeof obj === 'object' && Array.isArray(obj) === false;
 const saveResponse = async (req, res) => {
     try {
         if (!req.params.uid) {
@@ -97,13 +98,17 @@ const saveResponse = async (req, res) => {
             return res.status(500).send({ error: 'Callback not found' });
         }
         if (req.body) {
-            cb.result = req.body;
+            if (isObject(req.body)) {
+                cb.result = req.body;
+            } else {
+                cb.result = { data: req.body };
+            }
         }
         if (req.headers) {
             cb.resultHeaders = req.headers;
         }
         cb.save();
-        return res.send(cb.response);
+        return res.status(200).send(cb);
     } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Send Error:', err);
@@ -117,6 +122,6 @@ routerEmail.route('/').post(authToHub, add);
 routerEmail.route('/').get(authToHub, getCb);
 routerEmail.route('/').delete(authToHub, deleteOne);
 routerEmail.route('/admin').get(authToHub, getAdmin);
-routerEmail.route('/:uid').all(express.text(), saveResponse);
+routerEmail.route('/:uid').all(saveResponse);
 
 export default routerEmail;

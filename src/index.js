@@ -12,7 +12,10 @@ const port = (process.env.PORT || 3004);
 
 app.set('port', port);
 app.use(morgan('tiny'));
+
 app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({ extended: true }));
 if (process.env.SENTRY_DSN) {
     Sentry.init({
         dsn: process.env.SENTRY_DSN,
