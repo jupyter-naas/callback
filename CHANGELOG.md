@@ -1,3 +1,9 @@
+## 1.3.0 (2021-01-28)
+
+### Feat
+
+- add autoDelete callback
+
 ## 1.2.7 (2021-01-27)
 
 ### Fix
