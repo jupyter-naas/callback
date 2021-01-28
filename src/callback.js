@@ -31,13 +31,16 @@ const add = async (req, res) => {
         const uid = uuid.v4();
         let response = null;
         let responseHeaders = null;
+        let autoDelete = null;
         if (req.body) {
+            autoDelete = req.body.autoDelete || true;
             response = req.body.response || null;
             responseHeaders = req.body.responseHeaders || null;
         }
         Callback.create({
             user: req.auth.email,
             uuid: uid,
+            autoDelete,
             response,
             responseHeaders,
         });
@@ -56,7 +59,18 @@ const getCb = async (req, res) => {
                 user: req.auth.email,
                 uuid: req.query.uuid,
             },
-        }).then((data) => res.status(200).json(data))
+        }).then((data) => {
+            const resData = data.toJSON();
+            if (data.autoDelete) {
+                return Callback.destroy({
+                    where: {
+                        user: req.auth.email,
+                        uuid: req.body.uuid,
+                    },
+                }).then(() => res.status(200).json(resData));
+            }
+            return res.status(200).json(resData);
+        })
             .catch((err) => res.status(500).json(err));
     }
     return Callback.findAll({

@@ -23,6 +23,11 @@ export const Callback = sql.define('Callback', {
         type: sequelize.DataTypes.STRING,
         allowNull: false,
     },
+    autoDelete: {
+        type: sequelize.DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true,
+    },
     result: {
         type: sequelize.DataTypes.JSON,
         allowNull: true,
