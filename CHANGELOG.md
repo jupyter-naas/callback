@@ -1,3 +1,9 @@
+## 1.5.0 (2021-03-23)
+
+### Feat
+
+- allow admin post data for users
+
 ## 1.4.0 (2021-03-23)
 
 ### Feat
