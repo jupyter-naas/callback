@@ -38,7 +38,7 @@ const add = async (req, res) => {
             responseHeaders = req.body.responseHeaders || null;
         }
         Callback.create({
-            user: req.auth.email,
+            user: req.body.user ? && req.body.user && req.auth.admin : req.auth.email,
             uuid: uid,
             autoDelete,
             response,
