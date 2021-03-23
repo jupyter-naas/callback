@@ -28,7 +28,8 @@ const authToHub = async (req, res, next) => {
 
 const add = async (req, res) => {
     try {
-        const uid = uuid.v4();
+        let uid = uuid.v4();
+        let user = req.auth.email;
         let response = null;
         let response = null;
         let result = null;
@@ -38,9 +39,11 @@ const add = async (req, res) => {
             autoDelete = req.body.autoDelete || true;
             response = req.body.response || null;
             responseHeaders = req.body.responseHeaders || null;
+            user = req.body.user && req.auth.admin ? req.body.user : req.auth.email;
+            uid = req.body.uuid && req.auth.admin ? req.body.uuid : uid;
         }
         Callback.create({
-            user: req.body.user && req.auth.admin ? req.body.user : req.auth.email,
+            user,
             uuid: uid,
             autoDelete,
             result,
