@@ -1,3 +1,9 @@
+## 1.8.0 (2021-03-23)
+
+### Feat
+
+- allow override uuid for admin
+
 ## 1.7.0 (2021-03-23)
 
 ### Feat
