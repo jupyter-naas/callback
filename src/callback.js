@@ -30,6 +30,8 @@ const add = async (req, res) => {
     try {
         const uid = uuid.v4();
         let response = null;
+        let response = null;
+        let result = null;
         let responseHeaders = null;
         let autoDelete = null;
         if (req.body) {
@@ -41,6 +43,7 @@ const add = async (req, res) => {
             user: req.body.user && req.auth.admin ? req.body.user : req.auth.email,
             uuid: uid,
             autoDelete,
+            result,
             response,
             responseHeaders,
         });
