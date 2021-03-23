@@ -31,7 +31,6 @@ const add = async (req, res) => {
         let uid = uuid.v4();
         let user = req.auth.email;
         let response = null;
-        let response = null;
         let result = null;
         let responseHeaders = null;
         let autoDelete = null;
