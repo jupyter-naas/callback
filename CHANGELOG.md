@@ -1,3 +1,9 @@
+## 1.4.0 (2021-03-23)
+
+### Feat
+
+- allow admin to send data
+
 ## 1.3.0 (2021-01-28)
 
 ### Feat
