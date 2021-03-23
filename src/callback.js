@@ -112,6 +112,23 @@ const saveResponse = (req, res) => {
             return res.status(500).send({ error: 'Callback not found' });
         }
         const data = cb.toJSON();
+        let dataRes = { status: "ok" };
+        let naas_override = true;
+        if (data.responseHeaders) {
+            data.responseHeaders.keys().forEach((headerKey) => {
+                if (headerKey === "naas_no_override") {
+                    allow_multi = bool(data.responseHeaders[headerKey]);
+                } else {
+                    res.header(headerKey, data.responseHeaders[headerKey]);
+                }
+            });
+        }
+        if (data.response) {
+            dataRes = data.response;
+        }
+        if (!naas_override && data.result) {
+            return res.status(200).send(dataRes);
+        }
         const update = { result: null, resultHeaders: null };
         if (req.body) {
             update.result = { data: req.body };
@@ -121,15 +138,6 @@ const saveResponse = (req, res) => {
         }
         if (req.headers) {
             update.resultHeaders = req.headers;
-        }
-        if (data.responseHeaders) {
-            data.responseHeaders.keys().forEach((headerKey) => {
-                res.header(headerKey, data.responseHeaders[headerKey]);
-            });
-        }
-        let dataRes = { status: "ok" };
-        if (data.response) {
-            dataRes = data.response
         }
         return cb.update(update).then(() => res.status(200).send(dataRes));
     }).catch((err) => {
