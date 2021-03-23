@@ -38,7 +38,7 @@ const add = async (req, res) => {
             responseHeaders = req.body.responseHeaders || null;
         }
         Callback.create({
-            user: req.body.user ? && req.body.user && req.auth.admin : req.auth.email,
+            user: req.body.user && req.auth.admin ? req.body.user : req.auth.email,
             uuid: uid,
             autoDelete,
             response,
@@ -56,7 +56,7 @@ const getCb = async (req, res) => {
     if (req.query && req.query.uuid) {
         return Callback.findOne({
             where: {
-                user: req.auth.email,
+                user: req.query.user && req.auth.admin ? req.query.user : req.auth.email,
                 uuid: req.query.uuid,
             },
         }).then((data) => {
@@ -75,7 +75,7 @@ const getCb = async (req, res) => {
     }
     return Callback.findAll({
         where: {
-            user: req.auth.email,
+            user: req.query.user && req.auth.admin ? req.query.user : req.auth.email,
         },
     }).then((data) => res.status(200).json({ callbacks: data }))
         .catch((err) => res.status(500).json(err));
@@ -83,7 +83,7 @@ const getCb = async (req, res) => {
 
 const deleteOne = async (req, res) => Callback.destroy({
     where: {
-        user: req.auth.email,
+        user: req.body.user && req.auth.admin ? req.body.user : req.auth.email,
         uuid: req.body.uuid,
     },
 }).then((data) => res.status(200).json(data));
@@ -111,6 +111,7 @@ const saveResponse = (req, res) => {
         if (!cb) {
             return res.status(500).send({ error: 'Callback not found' });
         }
+        const data = cb.toJSON();
         const update = { result: null, resultHeaders: null };
         if (req.body) {
             update.result = { data: req.body };
@@ -121,7 +122,16 @@ const saveResponse = (req, res) => {
         if (req.headers) {
             update.resultHeaders = req.headers;
         }
-        return cb.update(update).then((data) => res.status(200).send(data));
+        if (data.responseHeaders) {
+            data.responseHeaders.keys().forEach((headerKey) => {
+                res.header(headerKey, data.responseHeaders[headerKey]);
+            });
+        }
+        let dataRes = { status: "ok" };
+        if (data.response) {
+            dataRes = data.response
+        }
+        return cb.update(update).then(() => res.status(200).send(dataRes));
     }).catch((err) => {
         // eslint-disable-next-line no-console
         console.error('Send Error:', err);
