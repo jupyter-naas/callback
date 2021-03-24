@@ -35,8 +35,9 @@ const add = async (req, res) => {
         let responseHeaders = null;
         let autoDelete = null;
         if (req.body) {
-            autoDelete = req.body.autoDelete || true;
+            autoDelete = bool(req.body.autoDelete);
             response = req.body.response || null;
+            result = req.body.result || null;
             responseHeaders = req.body.responseHeaders || null;
             user = req.body.user && req.auth.admin ? req.body.user : req.auth.email;
             uid = req.body.uuid && req.auth.admin ? req.body.uuid : uid;
