@@ -35,7 +35,7 @@ const add = async (req, res) => {
         let responseHeaders = null;
         let autoDelete = null;
         if (req.body) {
-            autoDelete = bool(req.body.autoDelete);
+            autoDelete = Boolean(req.body.autoDelete);
             response = req.body.response || null;
             result = req.body.result || null;
             responseHeaders = req.body.responseHeaders || null;
@@ -123,7 +123,7 @@ const saveResponse = (req, res) => {
         if (data.responseHeaders) {
             data.responseHeaders.keys().forEach((headerKey) => {
                 if (headerKey === "naas_no_override") {
-                    allow_multi = bool(data.responseHeaders[headerKey]);
+                    allow_multi = Boolean(data.responseHeaders[headerKey]);
                 } else {
                     res.header(headerKey, data.responseHeaders[headerKey]);
                 }
