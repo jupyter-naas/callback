@@ -42,14 +42,20 @@ const add = async (req, res) => {
             user = req.body.user && req.auth.admin ? req.body.user : req.auth.email;
             uid = req.body.uuid && req.auth.admin ? req.body.uuid : uid;
         }
-        Callback.create({
+        const newItem = {
             user,
             uuid: uid,
             autoDelete,
             result,
             response,
             responseHeaders,
-        });
+        }
+        const foundItem = await Callback.findOne({user, uuid: uid});
+        if (!foundItem) {
+            await Callback.create(newItem);
+        } else {
+            await Callback.update(newItem, {user, uuid: uid});
+        }
         return res.json({ uuid: uid });
     } catch (err) {
         // eslint-disable-next-line no-console
