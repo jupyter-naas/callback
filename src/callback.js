@@ -83,7 +83,15 @@ const getCb = async (req, res) => {
         where: {
             user: req.query.user && req.auth.admin ? req.query.user : req.auth.email,
         },
-    }).then((data) => res.status(200).json({ callbacks: data }))
+    }).then((data) => {
+        let f_data = data;
+        if (!req.auth.admin) {
+            f_data = data.filter((cb)=> {
+                return !cb.uuid.startsWith("naas_");
+            });
+        }
+        return res.status(200).json({ callbacks: f_data })
+    })
         .catch((err) => res.status(500).json(err));
 };
 
