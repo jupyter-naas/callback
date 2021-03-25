@@ -1,3 +1,9 @@
+## 1.8.4 (2021-03-25)
+
+### Fix
+
+- don't list naas_ uuid for non admin
+
 ## 1.8.3 (2021-03-24)
 
 ### Fix
