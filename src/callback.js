@@ -50,7 +50,7 @@ const add = async (req, res) => {
             response,
             responseHeaders,
         }
-        const foundItem = await Callback.findOne({user, uuid: uid});
+        const foundItem = await Callback.findOne({where: {user, uuid: uid}});
         if (!foundItem) {
             await Callback.create(newItem);
         } else {
