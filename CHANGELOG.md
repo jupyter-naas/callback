@@ -1,3 +1,9 @@
+## 1.8.7 (2021-03-30)
+
+### Fix
+
+- add where close for findOne
+
 ## 1.8.6 (2021-03-30)
 
 ### Fix
