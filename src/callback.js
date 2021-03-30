@@ -54,7 +54,7 @@ const add = async (req, res) => {
         if (!foundItem) {
             await Callback.create(newItem);
         } else {
-            await Callback.update(newItem, {user, uuid: uid});
+            await Callback.update(newItem, {where: {user, uuid: uid}});
         }
         return res.json({ uuid: uid });
     } catch (err) {
